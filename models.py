@@ -31,7 +31,8 @@ MODELS = {
                 "unit": "°C",
                 "scale": 0.1,
                 "precision": 1,
-                "icon": "mdi:thermometer-water"
+                "icon": "mdi:thermometer-water",
+                "device_class": "temperature"
             },
             {
                 "name": "Taux de sel",

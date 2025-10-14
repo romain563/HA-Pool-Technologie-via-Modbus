@@ -46,6 +46,8 @@ class PoolSensor(SensorEntity, RestoreEntity):
         self._attr_unique_id = config["unique_id"]
         self._attr_should_poll = True
 
+        self._attr_device_class = config.get("device_class")
+
     @property
     def state(self):
         return self._state
