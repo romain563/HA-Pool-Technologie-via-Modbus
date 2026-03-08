@@ -32,7 +32,7 @@
         "name": "Température de l'eau"
       },
       "taux_sel": {
-        "name": "Taux de sel"
+        "name": "Salinité"
       },
       "orp": {
         "name": "ORP"
@@ -42,7 +42,20 @@
       },
       "consigne_orp": {
         "name": "Consigne ORP"
+      },
+      "fonctionnement_electrolyse": {
+        "name": "Puissance électrolyse"
+      },
+      "mode_electrolyse": {
+        "name": "Mode électrolyse"
+      },
+      "concentration_correcteur_ph": {
+        "name": "Concentration correcteur pH"
+      }	  ,
+      "consigne_electrolyse": {
+        "name": "Consigne électrolyse"
       }
+	  
     },
     "number": {
       "consigne_orp": {
@@ -50,6 +63,12 @@
       },
       "consigne_ph": {
         "name": "Consigne pH"
+      },
+      "input_concentration_correcteur_ph": {
+        "name": "Concentration correcteur pH"
+      },
+      "consigne_electrolyse": {
+        "name": "Consigne électrolyse"
       }
     },
     "binary_sensor": {
