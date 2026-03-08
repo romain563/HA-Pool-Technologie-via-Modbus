@@ -11,8 +11,9 @@ Cette intégration permet de suivre et contrôler facilement les principaux para
 - Taux de sel
 - ORP
 - Taille du bassin
-- Consignes pH et ORP (lecture et écriture)
+- Consignes pH, %Electrolyse et ORP (lecture et écriture)
 - État de la communication Modbus
+  
 
 ## Matériel nécessaire
 
