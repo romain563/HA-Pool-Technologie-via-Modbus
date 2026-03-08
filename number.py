@@ -14,6 +14,8 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
     entities = [
         ORPSetpointEntity(hass, handler, config_entry.entry_id, model_label),
         PHSetpointEntity(hass, handler, config_entry.entry_id, model_label),
+        ELECTROLYSESetpointEntity(hass, handler, config_entry.entry_id, model_label),
+        ACIDESetpointEntity(hass, handler, config_entry.entry_id, model_label),
     ]
     async_add_entities(entities)
 
@@ -77,9 +79,9 @@ class PHSetpointEntity(NumberEntity):
         self._attr_translation_key = "consigne_ph"
         self._attr_has_entity_name = True
         self._attr_entity_category = None
-        self._attr_icon = "mdi:cog"
+        self._attr_icon = "mdi:ph"
         self._attr_unique_id = f"{entry_id}_consigne_ph"
-        self._attr_native_unit_of_measurement = "pH"
+    #   self._attr_native_unit_of_measurement = "None"
         self._attr_mode = "box"
         self._attr_native_value = 7.2
 
@@ -114,4 +116,100 @@ class PHSetpointEntity(NumberEntity):
         self._attr_native_value = value
         raw = int(round(value / self._scale))
         self._handler.write_register(self._address, raw)
+        await asyncio.sleep(0.5)
+        
+class ELECTROLYSESetpointEntity(NumberEntity):
+    def __init__(self, hass, handler, entry_id, model_label):
+        self._hass = hass
+        self._handler = handler
+        self._entry_id = entry_id
+        self._model_label = model_label
+        self._address = 4168
+
+        self._attr_translation_key = "consigne_electrolyse"
+        self._attr_has_entity_name = True
+        self._attr_entity_category = None
+        self._attr_icon = "mdi:flash-outline"
+        self._attr_unique_id = f"{entry_id}_consigne_electrolyse"
+        self._attr_native_unit_of_measurement = "%"
+        self._attr_mode = "box"
+        self._attr_native_value = 20
+
+    @property
+    def native_min_value(self):
+        return 10
+
+    @property
+    def native_max_value(self):
+        return 100
+
+    @property
+    def native_step(self):
+        return 1
+
+    @property
+    def device_info(self):
+        return {
+            "identifiers": {(DOMAIN, self._entry_id)},
+            "name": self._model_label,
+            "manufacturer": "Pool Technologie",
+            "model": self._model_label,
+        }
+
+    async def async_added_to_hass(self):
+        result = self._handler.read_register(self._address)
+        if result:
+            self._attr_native_value = int(result[0])
+
+    async def async_set_native_value(self, value: float) -> None:
+        self._attr_native_value = int(value)
+        self._handler.write_register(self._address, int(value))
+        await asyncio.sleep(0.5)
+
+class ACIDESetpointEntity(NumberEntity):
+    def __init__(self, hass, handler, entry_id, model_label):
+        self._hass = hass
+        self._handler = handler
+        self._entry_id = entry_id
+        self._model_label = model_label
+        self._address = 4208
+
+        self._attr_translation_key = "input_concentration_correcteur_ph"
+        self._attr_has_entity_name = True
+        self._attr_entity_category = None
+        self._attr_icon = "mdi:code-brackets"
+        self._attr_unique_id = f"{entry_id}_input_concentration_correcteur_ph"
+        self._attr_native_unit_of_measurement = "%"
+        self._attr_mode = "box"
+        self._attr_native_value = 30
+
+    @property
+    def native_min_value(self):
+        return 10
+
+    @property
+    def native_max_value(self):
+        return 50
+
+    @property
+    def native_step(self):
+        return 1
+
+    @property
+    def device_info(self):
+        return {
+            "identifiers": {(DOMAIN, self._entry_id)},
+            "name": self._model_label,
+            "manufacturer": "Pool Technologie",
+            "model": self._model_label,
+        }
+
+    async def async_added_to_hass(self):
+        result = self._handler.read_register(self._address)
+        if result:
+            self._attr_native_value = int(result[0])
+
+    async def async_set_native_value(self, value: float) -> None:
+        self._attr_native_value = int(value)
+        self._handler.write_register(self._address, int(value))
         await asyncio.sleep(0.5)
